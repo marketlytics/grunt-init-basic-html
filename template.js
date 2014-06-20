@@ -15,26 +15,38 @@ exports.notes = 'This template tries to guess file and directory paths, but ' +
 
 // The actual init template.
 exports.template = function(grunt, init, done) {
-
-  init.process({}, [
+  var list = [
     // Prompt for these values.
-    
+
       init.prompt('js_file','y'),
       init.prompt('css_file','y'),
       init.prompt('gruntfiles','y'),
       init.prompt('html','y'),
       init.prompt('ftpush','y'),
-      init.prompt('project_name','newproject'),
-      //init.prompt('html_file',''),
+      init.prompt('project_name', function(value, props, done) {
+          props.ftpush = /y/i.test(props.ftpush);
+          if(props.ftpush){
+          list.splice(list.length-1,0,init.prompt('ftppass','pass'));
+          list.splice(list.length-2,0,init.prompt('ftphost','host'));
+          list.splice(list.length-2,0,init.prompt('ftpuser','user'));
+        }
+            done();
+      }),
     
-  ], function(err, props) {
+  ];
+
+  init.process({}, list, function(err, props) {
         // Files to copy (and process).
+        if(props.project_name === 'undefined'){
+          props.project_name = 'newProject';
+        }
+        grunt.log.writeln(props.ftpuser);
     var files = init.filesToCopy(props);
     props.gruntfiles = /y/i.test(props.gruntfiles);
     props.css_file = /y/i.test(props.css_file);
     props.js_file = /y/i.test(props.js_file);
     props.html = /y/i.test(props.html);
-    props.ftpush = /y/i.test(props.ftpush);
+    grunt.log.writeln(props.ftpush);
 
     console.log(files);
     if(!props['gruntfiles']){
@@ -50,7 +62,7 @@ exports.template = function(grunt, init, done) {
       delete files['index.html'];
     }
     if(!props['ftpush']){
-      delete files['.ftppush'];
+      delete files['.ftppass'];
     }
 
   if (props.gruntfiles) {

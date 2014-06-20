@@ -64,7 +64,7 @@ module.exports = function(grunt) {
     ftpush: {
       build: {
         auth: {
-          host: 'server.com',
+          host: '{%=ftphost%}',
           port: 21,
           authKey: 'key1'
         },
