@@ -23,41 +23,55 @@ exports.template = function(grunt, init, done) {
       init.prompt('css_file','y'),
       init.prompt('gruntfiles','y'),
       init.prompt('html','y'),
+      init.prompt('ftpush','y'),
+      init.prompt('project_name','newproject'),
       //init.prompt('html_file',''),
     
   ], function(err, props) {
         // Files to copy (and process).
-    console.log(props['gruntfiles']);
     var files = init.filesToCopy(props);
+    props.gruntfiles = /y/i.test(props.gruntfiles);
+    props.css_file = /y/i.test(props.css_file);
+    props.js_file = /y/i.test(props.js_file);
+    props.html = /y/i.test(props.html);
+    props.ftpush = /y/i.test(props.ftpush);
 
     console.log(files);
-    if(props['gruntfiles'] !== 'y'){
+    if(!props['gruntfiles']){
       delete files['Gruntfile.js'];
-      delete files['package.json'];
     }
-    if(props['css_file'] !== 'y'){
+    if(!props['css_file']){
       delete files['css/style.css'];
     }
-    if(props['js_file'] !== 'y'){
-      delete files['js/java.js'];
+    if(!props['js_file']){
+      delete files['js/javascript.js'];
     }
-    if(props['html'] !== 'y' ){
+    if(!props['html']){
       delete files['index.html'];
     }
-
-
-    /*
-    grunt.file.setBase('%UserProfile%/.grunt-init/trial');
-    console.log(grunt.file.expandPath('/~/.grunt-init/trial'));
-    console.log(grunt.file.exists('indexTemplates'));
-    if(props['html_file'] !== ''){
-      files['index.html'] = 'trial/indexTemplates/'+ props['html_file'] +'/' + 'index.html';
+    if(!props['ftpush']){
+      delete files['.ftppush'];
     }
-    console.log(files);
-    */
-    
 
-    init.copyAndProcess(files);
+  if (props.gruntfiles) {
+      var devDependencies = {
+        "grunt": "~0.4.2",
+        "grunt-contrib-jshint": "~0.7.2",
+        "grunt-contrib-watch": "~0.5.3",
+        "grunt-contrib-connect": "^0.8.0"
+      };
+
+      if (props.ftpush) {
+        devDependencies["grunt-ftpush"] = "^0.3.3";
+      }
+      // Generate package.json file, used by npm and grunt.
+      init.writePackageJSON('package.json', {
+        node_version: '>= 0.10.0',
+        devDependencies: devDependencies
+      });
+    }
+
+    init.copyAndProcess(files,props);
     done();
 
 

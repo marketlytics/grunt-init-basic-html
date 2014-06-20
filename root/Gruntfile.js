@@ -60,12 +60,29 @@ module.exports = function(grunt) {
         }
       },
     },
+    {% if (ftpush) { %}
+    ftpush: {
+      build: {
+        auth: {
+          host: 'server.com',
+          port: 21,
+          authKey: 'key1'
+        },
+        src: '',   //folder to transfer
+        dest: '{%= project_name %}/',
+        //exclusions: ['path/to/source/folder/**/.DS_Store', 'path/to/source/folder/**/Thumbs.db', 'dist/tmp'],
+        simple: true,
+        useList: false
+      }
+    },
+    {% } %}
   });
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  {% if (ftpush) { %}   grunt.loadNpmTasks('grunt-ftpush'); {% } %}
 
   // Default task.
   grunt.registerTask('default', ['connect','watch','jshint']);

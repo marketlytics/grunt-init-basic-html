@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
   <title></title>
+     {% if (js_file) { %}<script type="text/javascript" src="js/javascript.js"></script> {% } %}
+     {% if (css_file) { %}<link rel="stylesheet" media="screen" href='css/style.css' type="text/css" /> {% } %}
     </head>
     <body>
       <script src="//localhost:35729/livereload.js"></script>
