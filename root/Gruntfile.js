@@ -76,15 +76,16 @@ module.exports = function(grunt) {
     {% } %}
   });
 
-  // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   {% if (configure_ftp) { %}
-    grunt.loadNpmTasks('grunt-configure_ftp');
+  grunt.loadNpmTasks('grunt-configure_ftp');
   {% } %}
 
-  // Default task.
   grunt.registerTask('default', ['connect','watch','jshint']);
+  {% if (configure_ftp) { %}
+  grunt.registerTask('deploy', 'configure_ftp:build');
+  {% } %}
 
 };
