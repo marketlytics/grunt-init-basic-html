@@ -11,6 +11,8 @@ exports.template = function(grunt, init, done) {
       init.prompt('name'),
       init.prompt('require_js_file','y'),
       init.prompt('require_css_file','y'),
+      init.prompt('inject_jquery','y'),
+      init.prompt('inject_bootstrap','n'),
       init.prompt('configure_ftp','y'),
       init.prompt('homepage', function(value, props, done) {
 
@@ -29,8 +31,6 @@ exports.template = function(grunt, init, done) {
 
   init.process({}, list, function(err, props) {
 
-    grunt.log.writeln(props.homepage);
-
     // homepage value cant set a default
     if(props.homepage === 'undefined'){
       props.homepage = 'example.com';
@@ -41,26 +41,36 @@ exports.template = function(grunt, init, done) {
     props.configure_ftp = /y/i.test(props.configure_ftp);
     props.require_css_file = /y/i.test(props.require_css_file);
     props.require_js_file = /y/i.test(props.require_js_file);
+    props.inject_jquery = /y/i.test(props.inject_jquery);
+    props.inject_bootstrap = /y/i.test(props.inject_bootstrap);
 
     // removing files which the user does not need.
-    if(!props['gruntfiles']){
-      delete files['Gruntfile.js'];
-    }
-
-    if(!props['require_css_file']){
+    if(!props.require_css_file) {
       delete files['css/style.css'];
     }
 
-    if(!props['require_js_file']){
+    if(!props.require_js_file) {
       delete files['js/javascript.js'];
     }
 
-    if(!props['configure_ftp']){
+    if(!props.configure_ftp) {
       delete files['.ftppass'];
     }
 
-    if (props.gruntfiles) {
-      var devDependencies = {
+    if(!props.inject_jquery) {
+      delete files['vendor/jquery-2.1.1/jquery-2.1.1.min.js'];
+      delete files['vendor/jquery-2.1.1/jquery-2.1.1.min.map'];
+    }
+
+    if(!props.inject_bootstrap) {
+      for(var file in files) {
+        if(/bootstrap-3.1.1/i.test(file)) {
+          delete files[file];
+        }
+      }
+    }
+
+    var devDependencies = {
         "grunt": "~0.4.2",
         "grunt-contrib-jshint": "~0.7.2",
         "grunt-contrib-watch": "~0.5.3",
@@ -76,7 +86,6 @@ exports.template = function(grunt, init, done) {
         node_version: '>= 0.10.0',
         devDependencies: devDependencies
       });
-    }
 
     init.copyAndProcess(files,props);
     done();
