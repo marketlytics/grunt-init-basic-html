@@ -7,6 +7,21 @@ module.exports = function(grunt) {
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
     // Task configuration.
+    copy: {
+        build: {
+            cwd: '',
+            src: ['**', '!**/node_modules/**', '!**/dist/**',  '!**/*.ftppass', '!**/package.json', '!**/Gruntfile.js'],
+            dest: 'dist',
+            expand: true
+        }
+    },
+
+    clean: {
+        build: {
+            src: ['dist']
+        }
+    },
+
     jshint: {
       options: {
         curly: true,
@@ -26,10 +41,7 @@ module.exports = function(grunt) {
       },
       js: {
         src: 'js/*.js'
-      },
-      gruntfile: {
-        src: 'Gruntfile.js'
-      },
+      }
     },
 
     watch: {
@@ -45,11 +57,7 @@ module.exports = function(grunt) {
           options:{
           livereload: 35729
         }
-      },
-      gruntfile: {
-        files: '<%= jshint.gruntfile %>',
-        tasks: ['jshint:gruntfile']
-      },
+      }
     },
 
     connect:{
@@ -59,33 +67,39 @@ module.exports = function(grunt) {
           livereload: 35729
         }
       },
-    },
-    {% if (configure_ftp) { %}
-    configure_ftp: {
+    }{% if (configure_ftp) { %},
+
+    ftpush: {
       build: {
         auth: {
           host: '{%=ftphost%}',
           port: 21
         },
-        src: '',
+        src: 'dist',
         dest: '{%= name %}/',
         simple: true,
         useList: false
       }
-    },
+    }
     {% } %}
   });
 
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   {% if (configure_ftp) { %}
-  grunt.loadNpmTasks('grunt-configure_ftp');
+  grunt.loadNpmTasks('grunt-ftpush');
   {% } %}
 
   grunt.registerTask('default', ['connect','watch','jshint']);
+
+  grunt.registerTask('prepare', ['jshint', 'clean', 'copy']);
+
   {% if (configure_ftp) { %}
-  grunt.registerTask('deploy', 'configure_ftp:build');
+  grunt.registerTask('deploy', ['prepare','ftpush:build']);
   {% } %}
 
 };

@@ -2,5 +2,5 @@
   "{%=ftphost%}": {
     "username": "{%=(ftpuser)%}",
     "password": "{%=(ftppass)%}"
-  },
+  }
 }

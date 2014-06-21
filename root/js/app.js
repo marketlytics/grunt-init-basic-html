@@ -20,9 +20,9 @@
  *
  */
 
-(function () {
+(function (console) {
     'use strict';
 
     console.log("Hello World");
 
-})();
+})(window.console);

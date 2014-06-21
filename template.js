@@ -79,11 +79,14 @@ exports.template = function(grunt, init, done) {
         "grunt": "~0.4.2",
         "grunt-contrib-jshint": "~0.7.2",
         "grunt-contrib-watch": "~0.5.3",
-        "grunt-contrib-connect": "^0.8.0"
+        "grunt-contrib-connect": "^0.8.0",
+        "grunt-contrib-clean": "latest",
+        "grunt-contrib-copy": "latest",
+        "grunt-contrib-uglify": "latest"
       };
 
       if (props.configure_ftp) {
-        devDependencies["grunt-configure_ftp"] = "^0.3.3";
+        devDependencies["grunt-ftpush"] = "^0.3.3";
       }
 
       // Generate package.json file, used by npm and grunt.
