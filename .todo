@@ -1,0 +1,20 @@
+
+Libraries required:
+
+- jQuery (latest)
+- Bootstrap
+- Handlebars
+- Google Analytics
+
+Compilations:
+
+- LESS
+- Optimize images
+- Minify JS/CSS
+
+
+Configured by default:
+
+- processhtml
+- watch (done)
+- livereload (done)

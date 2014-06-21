@@ -68,7 +68,7 @@ module.exports = function(grunt) {
           port: 21
         },
         src: '',
-        dest: '{%= project_name %}/',
+        dest: '{%= name %}/',
         simple: true,
         useList: false
       }

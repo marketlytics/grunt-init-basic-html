@@ -8,24 +8,33 @@ exports.after = 'Please run `npm install` to install the node modules and then' 
 
 exports.template = function(grunt, init, done) {
   var list = [
+      init.prompt('name'),
       init.prompt('js_file','y'),
       init.prompt('css_file','y'),
       init.prompt('gruntfiles','y'),
       init.prompt('ftpush','y'),
-      init.prompt('project_name', function(value, props, done) {
-        if(props.ftpush) {
-          list.splice(list.length - 1,0,init.prompt('ftppass','pass'));
+      init.prompt('homepage', function(value, props, done) {
+
+        // check if ftpush has Yes, then enable questions
+        // for FTP
+        if(/y/i.test(props.ftpush)) {
           list.splice(list.length - 2,0,init.prompt('ftphost','host'));
           list.splice(list.length - 2,0,init.prompt('ftpuser','user'));
+          list.splice(list.length - 2,0,init.prompt('ftppass','pass'));
         }
+
         done();
       }),
+      init.prompt('author_name')
   ];
 
   init.process({}, list, function(err, props) {
 
-    if(props.project_name === 'undefined'){
-      props.project_name = 'newProject';
+    grunt.log.writeln(props.homepage);
+
+    // homepage value cant set a default
+    if(props.homepage === 'undefined'){
+      props.homepage = 'example.com';
     }
 
     var files = init.filesToCopy(props);
@@ -52,7 +61,7 @@ exports.template = function(grunt, init, done) {
       delete files['.ftppass'];
     }
 
-  if (props.gruntfiles) {
+    if (props.gruntfiles) {
       var devDependencies = {
         "grunt": "~0.4.2",
         "grunt-contrib-jshint": "~0.7.2",
