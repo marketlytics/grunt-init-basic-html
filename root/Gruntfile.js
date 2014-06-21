@@ -22,6 +22,13 @@ module.exports = function(grunt) {
         }
     },
 
+    processhtml: {
+      options: {
+        process: true
+      },
+      'dist/index.html': ['dist/index.html']
+    },
+
     jshint: {
       options: {
         curly: true,
@@ -85,6 +92,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -96,7 +104,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['connect','watch','jshint']);
 
-  grunt.registerTask('prepare', ['jshint', 'clean', 'copy']);
+  grunt.registerTask('prepare', ['jshint', 'clean', 'copy', 'processhtml']);
 
   {% if (configure_ftp) { %}
   grunt.registerTask('deploy', ['prepare','ftpush:build']);

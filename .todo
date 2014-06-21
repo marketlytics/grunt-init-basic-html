@@ -15,6 +15,6 @@ Compilations:
 
 Configured by default:
 
-- processhtml
+D processhtml
 D watch
 D livereload

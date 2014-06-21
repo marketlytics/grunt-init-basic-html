@@ -82,7 +82,8 @@ exports.template = function(grunt, init, done) {
         "grunt-contrib-connect": "^0.8.0",
         "grunt-contrib-clean": "latest",
         "grunt-contrib-copy": "latest",
-        "grunt-contrib-uglify": "latest"
+        "grunt-contrib-uglify": "latest",
+        "grunt-processhtml": "~0.3.3"
       };
 
       if (props.configure_ftp) {

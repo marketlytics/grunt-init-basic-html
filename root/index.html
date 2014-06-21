@@ -17,9 +17,12 @@
 
 		<h1>Welcome to {%= name %} project!</h1>
 
+    <!-- build:remove -->
 		<!-- run `grunt` in your terminal and load this page on localhost:3000 to
 					enable auto-reload -->
     <script src="//localhost:35729/livereload.js"></script>
+    <!-- /build -->
+
     {% if (inject_jquery) { %}<script type="text/javascript" src="vendor/jquery-2.1.1/jquery-2.1.1.min.js"></script>{% } %}
     {% if (inject_bootstrap) { %}<script type="text/javascript" src="vendor/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>{% } %}
     {% if (inject_mustache) { %}<script type="text/javascript" src="vendor/mustache.js"></script>{% } %}
