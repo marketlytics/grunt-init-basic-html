@@ -9,15 +9,14 @@ exports.after = 'Please run `npm install` to install the node modules and then' 
 exports.template = function(grunt, init, done) {
   var list = [
       init.prompt('name'),
-      init.prompt('js_file','y'),
-      init.prompt('css_file','y'),
-      init.prompt('gruntfiles','y'),
-      init.prompt('ftpush','y'),
+      init.prompt('require_js_file','y'),
+      init.prompt('require_css_file','y'),
+      init.prompt('configure_ftp','y'),
       init.prompt('homepage', function(value, props, done) {
 
-        // check if ftpush has Yes, then enable questions
+        // check if configure_ftp has Yes, then enable questions
         // for FTP
-        if(/y/i.test(props.ftpush)) {
+        if(/y/i.test(props.configure_ftp)) {
           list.splice(list.length - 2,0,init.prompt('ftphost','host'));
           list.splice(list.length - 2,0,init.prompt('ftpuser','user'));
           list.splice(list.length - 2,0,init.prompt('ftppass','pass'));
@@ -39,25 +38,24 @@ exports.template = function(grunt, init, done) {
 
     var files = init.filesToCopy(props);
 
-    props.ftpush = /y/i.test(props.ftpush);
-    props.gruntfiles = /y/i.test(props.gruntfiles);
-    props.css_file = /y/i.test(props.css_file);
-    props.js_file = /y/i.test(props.js_file);
+    props.configure_ftp = /y/i.test(props.configure_ftp);
+    props.require_css_file = /y/i.test(props.require_css_file);
+    props.require_js_file = /y/i.test(props.require_js_file);
 
     // removing files which the user does not need.
     if(!props['gruntfiles']){
       delete files['Gruntfile.js'];
     }
 
-    if(!props['css_file']){
+    if(!props['require_css_file']){
       delete files['css/style.css'];
     }
 
-    if(!props['js_file']){
+    if(!props['require_js_file']){
       delete files['js/javascript.js'];
     }
 
-    if(!props['ftpush']){
+    if(!props['configure_ftp']){
       delete files['.ftppass'];
     }
 
@@ -69,8 +67,8 @@ exports.template = function(grunt, init, done) {
         "grunt-contrib-connect": "^0.8.0"
       };
 
-      if (props.ftpush) {
-        devDependencies["grunt-ftpush"] = "^0.3.3";
+      if (props.configure_ftp) {
+        devDependencies["grunt-configure_ftp"] = "^0.3.3";
       }
 
       // Generate package.json file, used by npm and grunt.

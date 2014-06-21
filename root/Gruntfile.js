@@ -60,8 +60,8 @@ module.exports = function(grunt) {
         }
       },
     },
-    {% if (ftpush) { %}
-    ftpush: {
+    {% if (configure_ftp) { %}
+    configure_ftp: {
       build: {
         auth: {
           host: '{%=ftphost%}',
@@ -80,8 +80,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  {% if (ftpush) { %}
-    grunt.loadNpmTasks('grunt-ftpush');
+  {% if (configure_ftp) { %}
+    grunt.loadNpmTasks('grunt-configure_ftp');
   {% } %}
 
   // Default task.

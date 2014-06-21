@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
     <title>{%= name %}</title>
     <link rel="stylesheet" media="screen" href='css/normalize.css' type="text/css" />
-  	{% if (css_file) { %}<link rel="stylesheet" media="screen" href='css/style.css' type="text/css" />{% } %}
+  	{% if (require_css_file) { %}<link rel="stylesheet" media="screen" href='css/style.css' type="text/css" />{% } %}
   </head>
   <body>
 
@@ -20,6 +20,6 @@
 					enable auto-reload -->
     <script src="//localhost:35729/livereload.js"></script>
     <script type="text/javascript" src="js/plugins.js"></script>
-    {% if (js_file) { %}<script type="text/javascript" src="js/app.js"></script>{% } %}
+    {% if (require_js_file) { %}<script type="text/javascript" src="js/app.js"></script>{% } %}
   </body>
   </html>
