@@ -31,17 +31,17 @@ module.exports = function(grunt) {
         src: 'Gruntfile.js'
       },
     },
-    
+
     watch: {
       index:{
-        files: ['index.html'],
+        files: ['*.html'],
         options: {
           livereload: 35729
         }
       },
       js: {
         files:['js/*.js'],
-        tasks: ['jshint:js',],
+        tasks: ['jshint:js'],
           options:{
           livereload: 35729
         }
@@ -65,12 +65,10 @@ module.exports = function(grunt) {
       build: {
         auth: {
           host: '{%=ftphost%}',
-          port: 21,
-          authKey: 'key1'
+          port: 21
         },
-        src: '',   //folder to transfer
+        src: '',
         dest: '{%= project_name %}/',
-        //exclusions: ['path/to/source/folder/**/.DS_Store', 'path/to/source/folder/**/Thumbs.db', 'dist/tmp'],
         simple: true,
         useList: false
       }
@@ -82,7 +80,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  {% if (ftpush) { %}   grunt.loadNpmTasks('grunt-ftpush'); {% } %}
+  {% if (ftpush) { %}
+    grunt.loadNpmTasks('grunt-ftpush');
+  {% } %}
 
   // Default task.
   grunt.registerTask('default', ['connect','watch','jshint']);
