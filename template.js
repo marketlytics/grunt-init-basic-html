@@ -13,6 +13,7 @@ exports.template = function(grunt, init, done) {
       init.prompt('require_css_file','y'),
       init.prompt('inject_jquery','y'),
       init.prompt('inject_bootstrap','n'),
+      init.prompt('inject_mustache', 'n'),
       init.prompt('configure_ftp','y'),
       init.prompt('homepage', function(value, props, done) {
 
@@ -68,6 +69,10 @@ exports.template = function(grunt, init, done) {
           delete files[file];
         }
       }
+    }
+
+    if(!props.inject_mustache) {
+      delete files['vendor/mutache.js'];
     }
 
     var devDependencies = {

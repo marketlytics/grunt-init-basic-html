@@ -1,9 +1,9 @@
 
 Libraries required:
 
-- jQuery (latest)
-- Bootstrap
-- Handlebars
+D jQuery (latest)
+D Bootstrap
+D Mustache (templating)
 - Google Analytics
 
 Compilations:
@@ -16,5 +16,5 @@ Compilations:
 Configured by default:
 
 - processhtml
-- watch (done)
-- livereload (done)
+D watch
+D livereload
