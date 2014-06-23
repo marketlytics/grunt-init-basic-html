@@ -1,6 +1,6 @@
 {
-  "key1": {
+  "{%=ftphost%}": {
     "username": "{%=(ftpuser)%}",
     "password": "{%=(ftppass)%}"
-  },
+  }
 }

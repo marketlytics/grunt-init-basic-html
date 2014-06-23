@@ -1,0 +1,20 @@
+
+Libraries required:
+
+D jQuery (latest)
+D Bootstrap
+D Mustache (templating)
+- Google Analytics
+
+Compilations:
+
+- LESS
+- Optimize images
+- Minify JS/CSS
+
+
+Configured by default:
+
+D processhtml
+D watch
+D livereload

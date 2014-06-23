@@ -7,6 +7,28 @@ module.exports = function(grunt) {
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
     // Task configuration.
+    copy: {
+        build: {
+            cwd: '',
+            src: ['**', '!**/node_modules/**', '!**/dist/**',  '!**/*.ftppass', '!**/package.json', '!**/Gruntfile.js'],
+            dest: 'dist',
+            expand: true
+        }
+    },
+
+    clean: {
+        build: {
+            src: ['dist']
+        }
+    },
+
+    processhtml: {
+      options: {
+        process: true
+      },
+      'dist/index.html': ['dist/index.html']
+    },
+
     jshint: {
       options: {
         curly: true,
@@ -26,30 +48,23 @@ module.exports = function(grunt) {
       },
       js: {
         src: 'js/*.js'
-      },
-      gruntfile: {
-        src: 'Gruntfile.js'
-      },
+      }
     },
-    
+
     watch: {
       index:{
-        files: ['index.html'],
+        files: ['*.html'],
         options: {
           livereload: 35729
         }
       },
       js: {
         files:['js/*.js'],
-        tasks: ['jshint:js',],
+        tasks: ['jshint:js'],
           options:{
           livereload: 35729
         }
-      },
-      gruntfile: {
-        files: '<%= jshint.gruntfile %>',
-        tasks: ['jshint:gruntfile']
-      },
+      }
     },
 
     connect:{
@@ -59,32 +74,40 @@ module.exports = function(grunt) {
           livereload: 35729
         }
       },
-    },
-    {% if (ftpush) { %}
+    }{% if (configure_ftp) { %},
+
     ftpush: {
       build: {
         auth: {
           host: '{%=ftphost%}',
-          port: 21,
-          authKey: 'key1'
+          port: 21
         },
-        src: '',   //folder to transfer
-        dest: '{%= project_name %}/',
-        //exclusions: ['path/to/source/folder/**/.DS_Store', 'path/to/source/folder/**/Thumbs.db', 'dist/tmp'],
+        src: 'dist',
+        dest: '{%= name %}/',
         simple: true,
         useList: false
       }
-    },
+    }
     {% } %}
   });
 
-  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-processhtml');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  {% if (ftpush) { %}   grunt.loadNpmTasks('grunt-ftpush'); {% } %}
+  {% if (configure_ftp) { %}
+  grunt.loadNpmTasks('grunt-ftpush');
+  {% } %}
 
-  // Default task.
   grunt.registerTask('default', ['connect','watch','jshint']);
+
+  grunt.registerTask('prepare', ['jshint', 'clean', 'copy', 'processhtml']);
+
+  {% if (configure_ftp) { %}
+  grunt.registerTask('deploy', ['prepare','ftpush:build']);
+  {% } %}
 
 };

@@ -1,94 +1,103 @@
 
 'use strict';
 
-// Basic template description.
-exports.description = 'Create a basic Gruntfile.';
+exports.description = 'Setups a basic HTML project.';
+exports.notes = 'This will ask you some questions on how to setup your project.';
+exports.after = 'Please run `npm install` to install the node modules and then' +
+                ' `grunt` to start the local server (for live reload).';
 
-// Template-specific notes to be displayed before question prompts.
-exports.notes = 'This template tries to guess file and directory paths, but ' +
-  'you will most likely need to edit the generated Gruntfile.js file before ' +
-  'running grunt. _If you run grunt after generating the Gruntfile, and ' +
-  'it exits with errors, edit the file!_';
-
-// Any existing file or directory matching this wildcard will cause a warning.
-//exports.warnOn = 'Gruntfile.js';
-
-// The actual init template.
 exports.template = function(grunt, init, done) {
   var list = [
-    // Prompt for these values.
+      init.prompt('name'),
+      init.prompt('require_js_file','y'),
+      init.prompt('require_css_file','y'),
+      init.prompt('inject_jquery','y'),
+      init.prompt('inject_bootstrap','n'),
+      init.prompt('inject_mustache', 'n'),
+      init.prompt('configure_ftp','y'),
+      init.prompt('homepage', function(value, props, done) {
 
-      init.prompt('js_file','y'),
-      init.prompt('css_file','y'),
-      init.prompt('gruntfiles','y'),
-      init.prompt('html','y'),
-      init.prompt('ftpush','y'),
-      init.prompt('project_name', function(value, props, done) {
-          props.ftpush = /y/i.test(props.ftpush);
-          if(props.ftpush){
-          list.splice(list.length-1,0,init.prompt('ftppass','pass'));
-          list.splice(list.length-2,0,init.prompt('ftphost','host'));
-          list.splice(list.length-2,0,init.prompt('ftpuser','user'));
+        // check if configure_ftp has Yes, then enable questions
+        // for FTP
+        if(/y/i.test(props.configure_ftp)) {
+          list.splice(list.length - 2,0,init.prompt('ftphost','host'));
+          list.splice(list.length - 2,0,init.prompt('ftpuser','user'));
+          list.splice(list.length - 2,0,init.prompt('ftppass','pass'));
         }
-            done();
+
+        done();
       }),
-    
+      init.prompt('author_name')
   ];
 
   init.process({}, list, function(err, props) {
-        // Files to copy (and process).
-        if(props.project_name === 'undefined'){
-          props.project_name = 'newProject';
-        }
-        grunt.log.writeln(props.ftpuser);
-    var files = init.filesToCopy(props);
-    props.gruntfiles = /y/i.test(props.gruntfiles);
-    props.css_file = /y/i.test(props.css_file);
-    props.js_file = /y/i.test(props.js_file);
-    props.html = /y/i.test(props.html);
-    grunt.log.writeln(props.ftpush);
 
-    console.log(files);
-    if(!props['gruntfiles']){
-      delete files['Gruntfile.js'];
+    // homepage value cant set a default
+    if(props.homepage === 'undefined'){
+      props.homepage = 'example.com';
     }
-    if(!props['css_file']){
+
+    var files = init.filesToCopy(props);
+
+    props.configure_ftp = /y/i.test(props.configure_ftp);
+    props.require_css_file = /y/i.test(props.require_css_file);
+    props.require_js_file = /y/i.test(props.require_js_file);
+    props.inject_jquery = /y/i.test(props.inject_jquery);
+    props.inject_bootstrap = /y/i.test(props.inject_bootstrap);
+
+    // removing files which the user does not need.
+    if(!props.require_css_file) {
       delete files['css/style.css'];
     }
-    if(!props['js_file']){
+
+    if(!props.require_js_file) {
       delete files['js/javascript.js'];
     }
-    if(!props['html']){
-      delete files['index.html'];
-    }
-    if(!props['ftpush']){
+
+    if(!props.configure_ftp) {
       delete files['.ftppass'];
     }
 
-  if (props.gruntfiles) {
-      var devDependencies = {
+    if(!props.inject_jquery) {
+      delete files['vendor/jquery-2.1.1/jquery-2.1.1.min.js'];
+      delete files['vendor/jquery-2.1.1/jquery-2.1.1.min.map'];
+    }
+
+    if(!props.inject_bootstrap) {
+      for(var file in files) {
+        if(/bootstrap-3.1.1/i.test(file)) {
+          delete files[file];
+        }
+      }
+    }
+
+    if(!props.inject_mustache) {
+      delete files['vendor/mutache.js'];
+    }
+
+    var devDependencies = {
         "grunt": "~0.4.2",
         "grunt-contrib-jshint": "~0.7.2",
         "grunt-contrib-watch": "~0.5.3",
-        "grunt-contrib-connect": "^0.8.0"
+        "grunt-contrib-connect": "^0.8.0",
+        "grunt-contrib-clean": "latest",
+        "grunt-contrib-copy": "latest",
+        "grunt-contrib-uglify": "latest",
+        "grunt-processhtml": "~0.3.3"
       };
 
-      if (props.ftpush) {
+      if (props.configure_ftp) {
         devDependencies["grunt-ftpush"] = "^0.3.3";
       }
+
       // Generate package.json file, used by npm and grunt.
       init.writePackageJSON('package.json', {
         node_version: '>= 0.10.0',
         devDependencies: devDependencies
       });
-    }
 
     init.copyAndProcess(files,props);
     done();
-
-
-
-
 
   });
 
