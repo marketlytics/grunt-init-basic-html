@@ -1,18 +1,18 @@
 #grunt-init-basic-html
 
-
 > A basic grunt-init template for creating a html file with a watch (live reload) function and a jshint function.
+> Also prompts the user for other files such as the css file and the javascript file along with a option to install ftppush and inject jquery,bootstrap and mustache.
 
 ##Installation
 
 If you havent done so u will need to install node ,npm ,grunt and grunt init.
 
-npm and node can be installed through
+npm and node can be installed through:
 ```
 http://nodejs.org/download/
 ```
 
-information to install grunt can be found on
+Information to install grunt can be found on
 ```
 http://gruntjs.com/getting-started
 ```
@@ -25,3 +25,11 @@ Once grunt-init is installed, place this template in your ~/.grunt-init/ directo
 git clone https://github.com/gruntjs/grunt-init-basic-html.git ~/.grunt-init/basic-html
 ```
 (Windows users, see [the documentation](http://gruntjs.com/project-scaffolding) for the correct destination directory path)
+
+##Using grunt-init-basic-html
+
+In order to initalize the template enterthe following in your command line/terminal:
+```
+grunt-init basic-html
+```
+The console will then prompt you some questions required to create your project file. after which it will write the files to the folder.
