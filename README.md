@@ -24,4 +24,4 @@ Once grunt-init is installed, place this template in your ~/.grunt-init/ directo
 ```
 git clone https://github.com/gruntjs/grunt-init-basic-html.git ~/.grunt-init/basic-html
 ```
-(Windows users, see [the documentation][http://gruntjs.com/project-scaffolding] for the correct destination directory path)
+(Windows users, see [the documentation](http://gruntjs.com/project-scaffolding) for the correct destination directory path)
